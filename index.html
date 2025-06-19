@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemini Chat | Google AI Studio</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="header-left">
+          <div class="logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg" alt="Gemini" class="logo-icon">
+            <span class="logo-text">Gemini</span>
+            <span class="logo-badge">AI Studio</span>
+          </div>
+        </div>
+        
+        <div class="header-center">
+          <div class="connection-status" id="connectionStatus">
+            <div class="connection-dot"></div>
+            <span class="connection-text">Connected</span>
+          </div>
+        </div>
+        
+        <div class="header-right">
+          <button class="icon-btn" id="helpBtn" title="Help">
+            <span class="material-icons-round">help_outline</span>
+          </button>
+          <button class="icon-btn" id="settingsBtn" title="Settings">
+            <span class="material-icons-round">settings</span>
+          </button>
+          <div class="user-menu">
+            <div class="user-avatar">
+              <span class="material-icons-round">account_circle</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Model Selection Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <span class="material-icons-round">menu</span>
+        </button>
+        <h2>Models</h2>
+      </div>
+      
+      <div class="model-search">
+        <div class="search-container">
+          <span class="material-icons-round search-icon">search</span>
+          <input type="text" placeholder="Search models..." id="modelSearch" class="search-input">
+        </div>
+      </div>
+      
+      <div class="model-categories">
+        <div class="category-filter">
+          <button class="filter-btn active" data-category="all">All Models</button>
+          <button class="filter-btn" data-category="gemini">Gemini</button>
+          <button class="filter-btn" data-category="claude">Claude</button>
+          <button class="filter-btn" data-category="gpt">GPT</button>
+          <button class="filter-btn" data-category="llama">Llama</button>
+        </div>
+      </div>
+      
+      <div class="models-container" id="modelsContainer">
+        <div class="models-loading">
+          <div class="spinner"></div>
+          <span>Loading models...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Model Header -->
+      <div class="model-header" id="modelHeader">
+        <div class="selected-model">
+          <div class="model-icon">
+            <span class="material-icons-round">smart_toy</span>
+          </div>
+          <div class="model-details">
+            <h3 class="model-name">Select a Model</h3>
+            <p class="model-description">Choose an AI model to start chatting</p>
+          </div>
+          <div class="model-stats">
+            <div class="stat">
+              <span class="stat-label">Context</span>
+              <span class="stat-value" id="contextLength">-</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Cost</span>
+              <span class="stat-value" id="modelCost">Free</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="model-actions">
+          <button class="btn-secondary" id="changeModelBtn">
+            <span class="material-icons-round">swap_horiz</span>
+            Change Model
+          </button>
+          <button class="btn-secondary" id="newChatBtn">
+            <span class="material-icons-round">add_comment</span>
+            New Chat
+          </button>
+        </div>
+      </div>
+
+      <!-- Token Usage Bar -->
+      <div class="usage-bar" id="usageBar">
+        <div class="usage-info">
+          <span class="usage-text">Token Usage</span>
+          <span class="usage-count" id="usageCount">0 / 10,000</span>
+        </div>
+        <div class="usage-progress">
+          <div class="usage-fill" id="usageFill"></div>
+        </div>
+      </div>
+
+      <!-- Chat Area -->
+      <div class="chat-area" id="chatArea">
+        <!-- Welcome Screen -->
+        <div class="welcome-screen" id="welcomeScreen">
+          <div class="welcome-content">
+            <div class="welcome-icon">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg" alt="Gemini">
+            </div>
+            <h1>Hello, I'm Gemini</h1>
+            <p>How can I help you today?</p>
+            
+            <div class="suggestion-cards">
+              <div class="suggestion-card" data-prompt="Explain quantum computing in simple terms">
+                <span class="material-icons-round">science</span>
+                <div class="suggestion-content">
+                  <h4>Explain</h4>
+                  <p>Quantum computing in simple terms</p>
+                </div>
+              </div>
+              
+              <div class="suggestion-card" data-prompt="Write a creative story about space exploration">
+                <span class="material-icons-round">auto_stories</span>
+                <div class="suggestion-content">
+                  <h4>Create</h4>
+                  <p>A story about space exploration</p>
+                </div>
+              </div>
+              
+              <div class="suggestion-card" data-prompt="Help me plan a healthy meal for the week">
+                <span class="material-icons-round">restaurant</span>
+                <div class="suggestion-content">
+                  <h4>Plan</h4>
+                  <p>A healthy meal for the week</p>
+                </div>
+              </div>
+              
+              <div class="suggestion-card" data-prompt="Debug this JavaScript code and explain the fix">
+                <span class="material-icons-round">code</span>
+                <div class="suggestion-content">
+                  <h4>Debug</h4>
+                  <p>JavaScript code with explanation</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="welcome-footer">
+              <p>Gemini may display inaccurate info, including about people, so double-check its responses.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+          <!-- Messages will be added here dynamically -->
+        </div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="input-area">
+        <div class="input-container">
+          <div class="input-wrapper">
+            <button class="input-btn" id="attachBtn" title="Attach file" disabled>
+              <span class="material-icons-round">attach_file</span>
+            </button>
+            
+            <div class="text-input-container">
+              <textarea 
+                id="messageInput" 
+                placeholder="Enter a prompt here"
+                class="message-input"
+                rows="1"
+                maxlength="32000"
+              ></textarea>
+              <div class="input-actions">
+                <button class="input-btn" id="voiceBtn" title="Voice input">
+                  <span class="material-icons-round">mic</span>
+                </button>
+              </div>
+            </div>
+            
+            <button class="send-btn" id="sendBtn" disabled>
+              <span class="material-icons-round send-icon">send</span>
+              <div class="loading-animation" id="loadingAnimation">
+                <div class="loading-dots">
+                  <div class="dot"></div>
+                  <div class="dot"></div>
+                  <div class="dot"></div>
+                </div>
+              </div>
+            </button>
+          </div>
+          
+          <div class="input-footer">
+            <div class="char-count">
+              <span id="charCount">0</span> / 32,000
+            </div>
+            <div class="input-shortcuts">
+              <span class="shortcut-hint">
+                <span class="material-icons-round">keyboard_return</span>
+                to send, 
+                <span class="kbd">Shift</span> + <span class="kbd">Enter</span> for new line
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Settings</h2>
+        <button class="icon-btn" id="closeSettings">
+          <span class="material-icons-round">close</span>
+        </button>
+      </div>
+      
+      <div class="modal-content">
+        <div class="settings-section">
+          <h3>Generation Settings</h3>
+          
+          <div class="setting-item">
+            <label class="setting-label">
+              <span class="label-text">Temperature</span>
+              <span class="label-value" id="tempValue">0.7</span>
+            </label>
+            <input type="range" id="temperatureSlider" min="0" max="2" step="0.1" value="0.7" class="slider">
+            <div class="setting-description">
+              Controls randomness. Use higher values for more creative responses.
+            </div>
+          </div>
+          
+          <div class="setting-item">
+            <label class="setting-label">
+              <span class="label-text">Max Output Tokens</span>
+              <span class="label-value" id="tokensValue">4096</span>
+            </label>
+            <input type="range" id="maxTokensSlider" min="256" max="8192" step="256" value="4096" class="slider">
+            <div class="setting-description">
+              Maximum length of the model's response.
+            </div>
+          </div>
+          
+          <div class="setting-item">
+            <label class="setting-checkbox">
+              <input type="checkbox" id="streamToggle" checked>
+              <span class="checkmark"></span>
+              <span class="label-text">Stream response</span>
+            </label>
+            <div class="setting-description">
+              Show the response as it's being generated.
+            </div>
+          </div>
+        </div>
+        
+        <div class="settings-section">
+          <h3>Interface</h3>
+          
+          <div class="setting-item">
+            <label class="setting-checkbox">
+              <input type="checkbox" id="darkModeToggle">
+              <span class="checkmark"></span>
+              <span class="label-text">Dark mode</span>
+            </label>
+          </div>
+          
+          <div class="setting-item">
+            <label class="setting-checkbox">
+              <input type="checkbox" id="autoScrollToggle" checked>
+              <span class="checkmark"></span>
+              <span class="label-text">Auto-scroll to new messages</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn-secondary" id="resetSettings">Reset to defaults</button>
+        <button class="btn-primary" id="saveSettings">Save changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/javascript.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/python.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/bash.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/json.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/css.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/html.min.js"></script>
+  <script src="./script.js"></script>
+</body>
+</html>
