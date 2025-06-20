@@ -2,7 +2,7 @@
 class GoogleAIChat {
   constructor() {
     this.config = {
-      baseUrl: 'http://localhost:8000',
+      baseUrl: 'https://gbot-backend.kneotech.cloud',
       maxRetries: 3,
       retryDelay: 1000,
       maxMessageLength: 32000
